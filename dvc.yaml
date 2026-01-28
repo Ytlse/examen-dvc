@@ -1,0 +1,44 @@
+stages:
+  processed:
+    cmd: python src/data/01_processed_data.py
+    deps:
+    - data/raw_data
+    - src/data/01_processed_data.py
+    outs:
+    - data/processed_data/
+  scaled:
+    cmd: python src/data/02_scaled_data.py
+    deps:
+    - data/processed_data
+    - src/data/02_scaled_data.py
+    outs:
+    - data/scaled_data/
+  gridsearch:
+    cmd: python src/models/03_model_gridsearch.py
+    deps:
+    - data/processed_data
+    - data/scaled_data/
+    - src/models/03_model_gridsearch.py
+    outs:
+    - models/gridsearch/
+  fit:
+    cmd: python src/models/04_model_fit.py
+    deps:
+    - data/processed_data
+    - data/scaled_data/
+    - src/models/04_model_fit.py
+    outs:
+    - models/last/
+
+  evaluate:
+    cmd: python src/models/05_evaluation.py
+    deps:
+    - data/processed_data
+    - data/scaled_data
+    - models/last
+    - src/models/05_evaluation.py
+    outs:
+    - data/predictions
+    metrics:
+    - metrics/scores.json:
+        cache: false

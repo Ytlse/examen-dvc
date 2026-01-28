@@ -12,7 +12,7 @@ from data.check_structure import check_existing_file, check_existing_folder
 
 verbose = True
 
-def xgboost_gridsearch(input_folderpath, X_train_filename, y_train_filename, output_folderpath):
+def xgboost_gridsearch(X_train_filepath, y_train_filepath, output_folderpath):
     """
     Perform grid search for XGBoost hyperparameter tuning and save the best parameters.
     This function loads training data, performs a grid search with cross-validation
@@ -49,9 +49,7 @@ def xgboost_gridsearch(input_folderpath, X_train_filename, y_train_filename, out
 
     # Import training data
     if verbose: print("Importing training data for grid search...")
-    X_train_filepath = os.path.join(input_folderpath, X_train_filename)
     X_train = pd.read_csv(X_train_filepath, sep=",")
-    y_train_filepath = os.path.join(input_folderpath, y_train_filename)
     y_train = pd.read_csv(y_train_filepath, sep=",")
 
     # Define the model
@@ -100,14 +98,16 @@ def xgboost_gridsearch(input_folderpath, X_train_filename, y_train_filename, out
         print(f"Erreur : Le fichier {output_filepath} existe déjà.")
 
 
-def main(input_folderpath="./data/processed_data/",
-        input_Xtrain_filename = "X_train_scaled.csv",
-        input_ytrain_filename = "y_train.csv",
-        output_folderpath="./models/"
+def main(X_train_filepath = "./data/scaled_data/X_train_scaled.csv",
+        y_train_filepath = "./data/processed_data/y_train.csv",
+        output_folderpath="./models/gridsearch/"
         ):
     """ Run XGBoost gridsearch and save best parameters in ./models/xgboost.pkl
     """
-    xgboost_gridsearch(input_folderpath, input_Xtrain_filename, input_ytrain_filename, output_folderpath)
+    print("""-------------
+          03 Starting grid search...
+          -------------""")
+    xgboost_gridsearch(X_train_filepath, y_train_filepath, output_folderpath)
     logger = logging.getLogger(__name__)
     logger.info('making scaled data set')
 

@@ -1,0 +1,116 @@
+schema: '2.0'
+stages:
+  processed:
+    cmd: python src/data/01_processed_data.py
+    deps:
+    - path: data/raw_data
+      hash: md5
+      md5: 0b9b0498ef0a1999f3141f0c8cd61a49.dir
+      size: 333774
+      nfiles: 2
+    - path: src/data/01_processed_data.py
+      hash: md5
+      md5: 72ce062570b27cee4c6e09f5b81f5343
+      size: 5454
+    outs:
+    - path: data/processed_data/
+      hash: md5
+      md5: 56a046e73b436f6ccdcf824e597c7810.dir
+      size: 298137
+      nfiles: 4
+  scaled:
+    cmd: python src/data/02_scaled_data.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: 56a046e73b436f6ccdcf824e597c7810.dir
+      size: 298137
+      nfiles: 4
+    - path: src/data/02_scaled_data.py
+      hash: md5
+      md5: c6c3c3d3a14d036d56157b0821987d63
+      size: 3647
+    outs:
+    - path: data/scaled_data/
+      hash: md5
+      md5: 0c597188badeca7f053f4b97b4b14f95.dir
+      size: 285931
+      nfiles: 2
+  gridsearch:
+    cmd: python src/models/03_model_gridsearch.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: 56a046e73b436f6ccdcf824e597c7810.dir
+      size: 298137
+      nfiles: 4
+    - path: data/scaled_data/
+      hash: md5
+      md5: 0c597188badeca7f053f4b97b4b14f95.dir
+      size: 285931
+      nfiles: 2
+    - path: src/models/03_model_gridsearch.py
+      hash: md5
+      md5: e7071d5eeaf77f0416aaa1463b5425f8
+      size: 4672
+    outs:
+    - path: models/gridsearch/
+      hash: md5
+      md5: 2e32d098aee75b2b349394fea2d79b38.dir
+      size: 121
+      nfiles: 1
+  fit:
+    cmd: python src/models/04_model_fit.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: 56a046e73b436f6ccdcf824e597c7810.dir
+      size: 298137
+      nfiles: 4
+    - path: data/scaled_data/
+      hash: md5
+      md5: 0c597188badeca7f053f4b97b4b14f95.dir
+      size: 285931
+      nfiles: 2
+    - path: src/models/04_model_fit.py
+      hash: md5
+      md5: 2b5f4adb6def667434c6262e734935d5
+      size: 3598
+    outs:
+    - path: models/last/
+      hash: md5
+      md5: 69d48d021349010738081664ee686c32.dir
+      size: 1146545
+      nfiles: 1
+  evaluate:
+    cmd: python src/models/05_evaluation.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: 56a046e73b436f6ccdcf824e597c7810.dir
+      size: 298137
+      nfiles: 4
+    - path: data/scaled_data
+      hash: md5
+      md5: 0c597188badeca7f053f4b97b4b14f95.dir
+      size: 285931
+      nfiles: 2
+    - path: models/last
+      hash: md5
+      md5: 69d48d021349010738081664ee686c32.dir
+      size: 1146545
+      nfiles: 1
+    - path: src/models/05_evaluation.py
+      hash: md5
+      md5: ed0dc733a3237c3b20d5c7624ab3de95
+      size: 4445
+    outs:
+    - path: data/predictions
+      hash: md5
+      md5: 0427055a1e4ef6d9aa8d36b32cc056be.dir
+      size: 5896
+      nfiles: 1
+    - path: metrics/scores.json
+      hash: md5
+      md5: 48a74c39bc2c5d58f423aca21e840800
+      size: 60

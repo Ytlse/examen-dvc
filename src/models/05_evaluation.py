@@ -13,12 +13,11 @@ import json
 
 verbose = True
 
-def evaluate(input_folderpath, X_test_filename, y_test_filename, best_model_path, pred_folderpath,metrics_folderpath):
-    def evaluate(input_folderpath, X_test_filename, y_test_filename, best_model_path, pred_folderpath, metrics_folderpath):
-        """
-        Evaluate a trained machine learning model on test data and save results.
-        This function loads a pre-trained model, evaluates its performance on test data,
-        and saves predictions and metrics to specified directories.
+def evaluate(X_test_filepath, y_test_filepath, best_model_path, pred_folderpath, metrics_folderpath):
+    """
+    Evaluate a trained machine learning model on test data and save results.
+    This function loads a pre-trained model, evaluates its performance on test data,
+    and saves predictions and metrics to specified directories.
         Parameters
         ----------
         input_folderpath : str
@@ -49,9 +48,7 @@ def evaluate(input_folderpath, X_test_filename, y_test_filename, best_model_path
 
     # Import testing data
     if verbose: print("Importing testing data for grid search...")
-    X_test_filepath = os.path.join(input_folderpath, X_test_filename)
     X_test = pd.read_csv(X_test_filepath, sep=",")
-    y_test_filepath = os.path.join(input_folderpath, y_test_filename)
     y_test = pd.read_csv(y_test_filepath, sep=",")
 
     # Load model
@@ -92,16 +89,18 @@ def evaluate(input_folderpath, X_test_filename, y_test_filename, best_model_path
         if verbose: print("Saved metrics to", final_metrics_path)
 
 
-def main(input_folderpath="./data/processed_data/",
-        X_test_filename = "X_test_scaled.csv",
-        y_test_filename = "y_test.csv",
-        best_model_path="./models/xgboost_final_model.pkl",
+def main(X_test_filepath = "./data/scaled_data/X_test_scaled.csv",
+        y_test_filepath = "./data/processed_data/y_test.csv",
+        best_model_path="./models/last/xgboost_final_model.pkl",
         pred_folderpath="./data/predictions/",
         metrics_folderpath="./metrics/"
         ):
     """ Evaluate model and save predictions and metrics
     """
-    evaluate(input_folderpath, X_test_filename, y_test_filename, best_model_path, pred_folderpath,metrics_folderpath)
+    print("""-------------
+          05 Starting final model evaluation...
+          -------------""")
+    evaluate(X_test_filepath,y_test_filepath, best_model_path, pred_folderpath,metrics_folderpath)
     logger = logging.getLogger(__name__)
     logger.info('making scaled data set')
 

@@ -11,7 +11,7 @@ from data.check_structure import check_existing_folder
 
 verbose = True
 
-def fit(input_folderpath, X_train_filename, y_train_filename, best_params_path, output_model_folderpath):
+def fit(X_train_filepath, y_train_filepath, best_params_path, output_model_folderpath):
     """
     Train a final XGBoost regression model using best parameters and save it.
     This function loads training data and pre-optimized hyperparameters, trains a final
@@ -45,9 +45,7 @@ def fit(input_folderpath, X_train_filename, y_train_filename, best_params_path, 
 
     # Import training data
     if verbose: print("Importing training data for grid search...")
-    X_train_filepath = os.path.join(input_folderpath, X_train_filename)
     X_train = pd.read_csv(X_train_filepath, sep=",")
-    y_train_filepath = os.path.join(input_folderpath, y_train_filename)
     y_train = pd.read_csv(y_train_filepath, sep=",")
 
     # Charger les meilleurs paramètres depuis le fichier .pkl
@@ -71,15 +69,17 @@ def fit(input_folderpath, X_train_filename, y_train_filename, best_params_path, 
         if verbose: print("Saved final model to", final_model_path)
 
 
-def main(input_folderpath="./data/processed_data/",
-        X_train_filename = "X_train_scaled.csv",
-        y_train_filename = "y_train.csv",
-        best_params_path="./models/xgboost_best_params.pkl",
-        output_model_folderpath="./models/"
+def main(X_train_filepath = "./data/scaled_data/X_train_scaled.csv",
+        y_train_filepath = "./data/processed_data/y_train.csv",
+        best_params_path="./models/gridsearch/xgboost_best_params.pkl",
+        output_model_folderpath="./models/last/"
         ):
-    """ Run XGBoost final model training and save it to ./models/xgboost_final_model.pkl
+    """ Run XGBoost final model training and save it to ./models/last/xgboost_final_model.pkl
     """
-    fit(input_folderpath, X_train_filename, y_train_filename, best_params_path, output_model_folderpath)
+    print("""-------------
+          04 Starting final model training...
+          -------------""")
+    fit(X_train_filepath, y_train_filepath, best_params_path, output_model_folderpath)
     logger = logging.getLogger(__name__)
     logger.info('making scaled data set')
 

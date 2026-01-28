@@ -98,6 +98,9 @@ def main(input_filename = "raw.csv",
         ):
     """ Upload data from AWS s3 in ./data/raw
     """
+    print("""-------------
+          01 Starting data processing...
+          -------------""")
     import_raw_data(input_folderpath, input_filename, bucket_folder_url)
     process_data(input_folderpath,input_filename, output_folderpath,)
     logger = logging.getLogger(__name__)

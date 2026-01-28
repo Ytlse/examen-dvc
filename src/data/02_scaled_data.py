@@ -63,10 +63,13 @@ def scale_data(input_folderpath, input_train_filename, input_test_filename, outp
 def main(input_folderpath="./data/processed_data/",
         input_train_filename = "X_train.csv",
         input_test_filename = "X_test.csv",
-        output_folderpath="./data/processed_data/"
+        output_folderpath="./data/scaled_data/"
         ):
     """ Scale data in ./data/processed_data
     """
+    print("""-------------
+          02 Starting data scaling...
+          -------------""")
     scale_data(input_folderpath, input_train_filename, input_test_filename, output_folderpath)
     logger = logging.getLogger(__name__)
     logger.info('making scaled data set')
